@@ -22,3 +22,11 @@ int main() {
 ```
 
 Output: ```{"name": "David"}```
+
+# Building
+
+Just run command: ```make install```
+It will install libvalera.so to ```/usr/lib/``` folder.
+
+You also can run examples: ```make example``` or ```make json``` or ```make simple```
+
