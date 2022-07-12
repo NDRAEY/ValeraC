@@ -4,7 +4,10 @@ libvalera is a implementation of dynamic-sized arrays and Python-like dicts.
 
 # Dicts
 
-Example: `#include <valera.h>
+Example:
+```c
+
+#include <valera.h>
 #include <stdio.h>
 
 int main() {
@@ -15,6 +18,7 @@ int main() {
 	puts("");
 
 	return 0;
-}`
+}
+```
 
-Output: `{"name": "David"}`
+Output: ```{"name": "David"}```
