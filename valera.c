@@ -368,3 +368,45 @@ void valera_json(valera_node_t *obj, char *str) {
 	}
 	str[point++] = '}';
 }
+
+/* This function indicates how much memory the user should allocate */
+int valera_array_join_size(valera_array_t* array, char* sign) {
+	int overall_length = 0;
+	int length = valera_array_length(array);
+	int signlen = strlen(sign);
+
+	for(int i=0; i<length; i++) {
+		valera_value_t* value = valera_array_get(array, i);
+		if(value->type!=VAL_STR) {
+			valera_value_destroy(value);
+			return 0; // Only strings allowed to join!
+		}
+		overall_length += strlen(value->str)+signlen;
+	}
+	// overall_length -= signlen;
+	return overall_length;
+}
+
+char valera_array_join(valera_array_t* array, char* buf, char* sign) {
+	int length = valera_array_length(array);
+	int at = 0;
+	int signlen = strlen(sign);
+	//printf("Signlen is: %d\n", signlen);
+	
+	for(int i=0; i<length; i++) {
+		valera_value_t* value = valera_array_get(array, i);
+		if(value->type!=VAL_STR) {
+			//valera_value_destroy(value);
+			return -1; // Only strings allowed to join!
+		}
+		
+		int strl = strlen(value->str);
+		memcpy(buf + at, value->str, strl);
+		at += strl;
+		if(i+1<length) {
+			memcpy(buf + at, sign, signlen);
+			at += signlen;
+		}
+	}
+	return 0;
+}

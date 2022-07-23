@@ -19,6 +19,11 @@ simple:
 	@gcc valera.c examples/simple.c -I. -o ./simple
 	@echo "Run program with ./simple"
 
+join:
+	@echo "Compiling join..."
+	@gcc valera.c examples/join.c -I. -o ./join
+	@echo "Run program with ./join"
+
 install: libvalera.so
 	install libvalera.so $(PREFIX)/lib/
 	install valera.h $(PREFIX)/include
