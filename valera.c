@@ -255,11 +255,23 @@ void valera_keys(valera_node_t *obj, valera_array_t *arr) {
 valera_value_t *valera_get(valera_node_t *obj, char *name) {
 	while(1) {
 		char stop = obj->next->busy==0;
-		char stop2 = obj->name == name;
+		//char stop2 = obj->name == name;
+		char stop2 = strcmp(obj->name, name)==0;
 
 		if(stop2) return obj->value;
 		if(stop) break;
 		obj = obj->next;
+	}
+	return 0;
+}
+
+char valera_has(valera_node_t *obj, char *name) {
+	while(1) {
+		char stop = obj->next->busy==0;
+		char stop2 = strcmp(obj->name,name)==0;
+		
+		if(stop2) return 1;
+		if(stop) break;
 	}
 	return 0;
 }
