@@ -146,8 +146,23 @@ int valera_array_length(valera_array_t *arr) {
 	return arr->length;
 }
 
+void valera_array_removeat(valera_array_t *arr, unsigned int idx) {
+	if(idx > (unsigned int)arr->length) return;
+	valera_value_destroy(arr->values[idx]);
+	int w = 1;
+
+	for(int i=idx; i<arr->length; i++) {
+		arr->values[i] = arr->values[idx+w];
+		w++;
+	}
+	
+	arr->length--;
+	arr->setmax--;
+	arr->values = realloc(arr->values, sizeof(valera_value_t)*arr->setmax);
+}
+
 valera_value_t *valera_array_get(valera_array_t *arr, int index) {
-	if(index>arr->length) return 0;
+	if(index > arr->length) return 0;
 	return arr->values[index];
 }
 
