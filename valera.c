@@ -272,6 +272,7 @@ char valera_has(valera_node_t *obj, char *name) {
 		
 		if(stop2) return 1;
 		if(stop) break;
+		obj = obj->next;
 	}
 	return 0;
 }
