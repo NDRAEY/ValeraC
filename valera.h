@@ -70,5 +70,6 @@ int valera_json_size(valera_node_t *obj);
 void valera_json(valera_node_t *obj, char *str);
 char valera_array_join(valera_array_t* array, char *buf, char* sign);
 int  valera_array_join_size(valera_array_t *arr, char* sign);
+char valera_has(valera_node_t* obj, char *name);
 
 #endif
