@@ -384,7 +384,7 @@ int valera_array_join_size(valera_array_t* array, char* sign) {
 		overall_length += strlen(value->str)+signlen;
 	}
 	// overall_length -= signlen;
-	return overall_length;
+	return overall_length+1;
 }
 
 char valera_array_join(valera_array_t* array, char* buf, char* sign) {
