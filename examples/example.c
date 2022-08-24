@@ -42,6 +42,9 @@ int main() {
 	valera_print(obj);
 	puts("");
 
+	valera_array_destroy(array);
+	valera_array_destroy(next_forms);
+	valera_destroy(ano);
 	valera_destroy(obj);
 	
 	return 0;
