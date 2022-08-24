@@ -72,7 +72,7 @@ void valera_value_string(valera_value_t *val, char *string) {
 }
 
 valera_value_t *valera_value_new() {
-	valera_value_t *tmp = malloc(sizeof(valera_value_t*));
+	valera_value_t *tmp = malloc(sizeof(valera_value_t));
 	VCHECKMEM(tmp);
 	return tmp;
 }
@@ -83,20 +83,21 @@ void valera_value_set_object(valera_value_t *val, valera_node_t* object) {val->t
 void valera_value_set_array(valera_value_t *val, valera_array_t* array) {val->type = VAL_ARR; val->arr = array;}
 
 void valera_value_destroy(valera_value_t *val) {
+	if(val==0) return;
 	val->used = 0;
 	val->type = 0;
 	free(val);
 }
 
 void valera_array_destroy(valera_array_t *arr) {
+	if(arr==0) return;
 	for(int i=0; i<arr->length; i++) {
 		valera_value_destroy(arr->values[i]);
 	}
 }
 
 valera_array_t *valera_array_new() {
-	valera_array_t *arr = 0;
-	arr = malloc(sizeof(valera_array_t*));
+	valera_array_t *arr = malloc(sizeof(valera_array_t));
 	VCHECKMEM(arr);
 	arr->length = 0;
 	arr->setmax = 1;
@@ -105,8 +106,8 @@ valera_array_t *valera_array_new() {
 }
 
 void _valera_array_extend(valera_array_t *arr) {
-	arr->setmax ++;
-	arr->values = realloc(arr->values, sizeof(valera_value_t*)*arr->setmax);
+	arr->setmax++;
+	arr->values = realloc(arr->values, sizeof(valera_value_t)*arr->setmax);
 }
 
 void valera_array_push(valera_array_t *arr, valera_value_t *value) {
@@ -214,9 +215,9 @@ valera_node_t *valera_new() {
 	valera_node_t *obj = malloc(sizeof(valera_node_t*));
 	VCHECKMEM(obj);
 	obj->busy  = 0;
-	obj->next  = malloc(sizeof(valera_node_t*));
+	obj->next  = malloc(sizeof(valera_node_t));
 	VCHECKMEM(obj->next);
-	obj->value = malloc(sizeof(valera_value_t*));
+	obj->value = malloc(sizeof(valera_value_t));
 	VCHECKMEM(obj->value);
 	return obj;
 }
@@ -224,13 +225,14 @@ valera_node_t *valera_new() {
 void _valera_new(valera_node_t *obj) {
 	obj->busy  = 0;
 	obj->next  = 0;
-	obj->next  = malloc(sizeof(valera_node_t*));
+	obj->next  = malloc(sizeof(valera_node_t));
 	VCHECKMEM(obj->next);
-	obj->value = malloc(sizeof(valera_value_t*));
+	obj->value = malloc(sizeof(valera_value_t));
 	VCHECKMEM(obj->value);
 }
 
 void valera_destroy(valera_node_t *obj) {
+	if(obj==0) return;
 	// TODO: Memory cleanup
 	while(1) {
 		if(obj->next->busy==0) break;
