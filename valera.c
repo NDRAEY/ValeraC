@@ -107,7 +107,7 @@ valera_array_t *valera_array_new() {
 
 void _valera_array_extend(valera_array_t *arr) {
 	arr->setmax++;
-	arr->values = realloc(arr->values, sizeof(valera_value_t)*arr->setmax);
+	arr->values = realloc(arr->values, sizeof(valera_value_t**)*arr->setmax);
 }
 
 void valera_array_push(valera_array_t *arr, valera_value_t *value) {
