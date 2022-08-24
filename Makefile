@@ -6,7 +6,7 @@ libvalera.so:
 
 example:
 	@echo "Compiling example..."
-	@gcc valera.c examples/example.c -I. -o ./example
+	@gcc -ggdb valera.c examples/example.c -I. -o ./example
 	@echo "Run program with ./example"
 
 json:

@@ -1,6 +1,16 @@
 #ifndef VALERA_H
 #define VALERA_H
 
+#define VCHECKMEM(obj) if(obj==0) {\
+	printf("L%d: malloc() failed!", __LINE__);\
+	exit(1);\
+}
+
+#define VCHECKMEMRET(obj) if(obj==0) {\
+	printf("L%d: malloc() failed!", __LINE__);\
+	return 0;\
+}
+
 typedef struct valera_node {
 	char                 busy;
 	char*                name;
