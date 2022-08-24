@@ -97,11 +97,11 @@ void valera_array_destroy(valera_array_t *arr) {
 }
 
 valera_array_t *valera_array_new() {
-	valera_array_t *arr = malloc(sizeof(valera_array_t));
+	valera_array_t *arr = malloc(sizeof(valera_array_t*));
 	VCHECKMEM(arr);
 	arr->length = 0;
 	arr->setmax = 1;
-	arr->values = malloc(sizeof(valera_value_t));
+	arr->values = malloc(sizeof(valera_value_t**));
 	return arr;
 }
 
