@@ -215,9 +215,9 @@ valera_node_t *valera_new() {
 	valera_node_t *obj = malloc(sizeof(valera_node_t*));
 	VCHECKMEM(obj);
 	obj->busy  = 0;
-	obj->next  = malloc(sizeof(valera_node_t));
+	obj->next  = malloc(sizeof(valera_node_t*));
 	VCHECKMEM(obj->next);
-	obj->value = malloc(sizeof(valera_value_t));
+	obj->value = malloc(sizeof(valera_value_t*));
 	VCHECKMEM(obj->value);
 	return obj;
 }
@@ -225,9 +225,9 @@ valera_node_t *valera_new() {
 void _valera_new(valera_node_t *obj) {
 	obj->busy  = 0;
 	obj->next  = 0;
-	obj->next  = malloc(sizeof(valera_node_t));
+	obj->next  = malloc(sizeof(valera_node_t*));
 	VCHECKMEM(obj->next);
-	obj->value = malloc(sizeof(valera_value_t));
+	obj->value = malloc(sizeof(valera_value_t*));
 	VCHECKMEM(obj->value);
 }
 
