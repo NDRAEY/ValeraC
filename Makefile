@@ -24,6 +24,11 @@ join:
 	@gcc valera.c examples/join.c -I. -o ./join
 	@echo "Run program with ./join"
 
+aoo:
+	@echo "Compiling AOO..."
+	@gcc valera.c examples/array_objs.c -I. -o ./aoo
+	@echo "Run program with ./aoo"
+
 install: libvalera.so
 	install libvalera.so $(PREFIX)/lib/
 	install valera.h $(PREFIX)/include

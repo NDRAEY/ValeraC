@@ -71,7 +71,7 @@ void valera_value_string(valera_value_t *val, char *string) {
 }
 
 valera_value_t *valera_value_new() {
-	valera_value_t *tmp = malloc(sizeof(valera_value_t));
+	valera_value_t *tmp = calloc(1, sizeof(valera_value_t));
 	VCHECKMEM(tmp);
 	return tmp;
 }
@@ -223,18 +223,17 @@ valera_node_t *valera_new() {
 	obj->busy  = 0;
 	obj->next  = calloc(1, sizeof(valera_node_t));
 	VCHECKMEM(obj->next);
-	obj->value = calloc(1, sizeof(valera_value_t));
-	VCHECKMEM(obj->value);
+	obj->value = 0; //calloc(1, sizeof(valera_value_t));
+	//VCHECKMEM(obj->value);
 	return obj;
 }
 
 void _valera_new(valera_node_t *obj) {
 	obj->busy  = 0;
-	obj->next  = 0;
 	obj->next  = calloc(1, sizeof(valera_node_t));
 	VCHECKMEM(obj->next);
-	obj->value = calloc(1, sizeof(valera_value_t));
-	VCHECKMEM(obj->value);
+	obj->value = 0; //calloc(1, sizeof(valera_value_t));
+	//VCHECKMEM(obj->value);
 }
 
 void valera_destroy(valera_node_t *obj) {
