@@ -6,7 +6,7 @@ libvalera.so:
 
 example:
 	@echo "Compiling example..."
-	@gcc valera.c examples/example.c -I. -o ./example
+	@gcc -ggdb valera.c examples/example.c -I. -o ./example
 	@echo "Run program with ./example"
 
 json:
@@ -26,6 +26,10 @@ join:
 
 test_change:
 	@gcc valera.c examples/test_change.c -I. -o ./change
+aoo:
+	@echo "Compiling AOO..."
+	@gcc valera.c examples/array_objs.c -I. -o ./aoo
+	@echo "Run program with ./aoo"
 
 install: libvalera.so
 	install libvalera.so $(PREFIX)/lib/
