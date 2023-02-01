@@ -8,7 +8,9 @@
 #include "valera.h"
 
 void valera_value_print(valera_value_t *val) {
-	if(val->type==VAL_NUM) {
+	if(!val) {
+		printf("null");
+	}else if(val->type==VAL_NUM) {
 		printf("%i", val->num);
 	}else if(val->type==VAL_STR) {
 		printf("\"%s\"", val->str);
@@ -18,8 +20,6 @@ void valera_value_print(valera_value_t *val) {
 		printf("null");
 	}else if(val->type==VAL_ARR) {
 		valera_array_print(val->arr);
-	}else if(!val) {
-		printf("null");
 	}
 }
 
@@ -36,14 +36,14 @@ int valera_digit_count(int number)
 
 int valera_value_string_size(valera_value_t *val) {
 	int size = 0;
-	if(val->type==VAL_NUM) {
+	if(!val || val->type==VAL_UNDEF) {
+		size=4;
+	}else if(val->type==VAL_NUM) {
 		size=valera_digit_count(val->num);
 	}else if(val->type==VAL_STR) {
 		size=2+strlen(val->str);
 	}else if(val->type==VAL_OBJ) {
 		size=valera_json_size(val->obj);
-	}else if(val->type==VAL_UNDEF || !val) {
-		size=4;
 	}else if(val->type==VAL_ARR) {
 		size=valera_array_string_size(val->arr);
 	}
@@ -51,7 +51,9 @@ int valera_value_string_size(valera_value_t *val) {
 }
 
 void valera_value_string(valera_value_t *val, char *string) {
-	if(val->type==VAL_NUM) {
+	if(!val || val->type==VAL_UNDEF) {
+		sprintf(string, "null");
+	}else if(val->type==VAL_NUM) {
 		sprintf(string, "%i", val->num);
 	}else if(val->type==VAL_STR) {
 		sprintf(string, "\"%s\"", val->str);
@@ -60,8 +62,6 @@ void valera_value_string(valera_value_t *val, char *string) {
 		valera_json(val->obj, st);
 		sprintf(string, "%s", st);
 		free(st);
-	}else if(val->type==VAL_UNDEF || !val) {
-		sprintf(string, "null");
 	}else if(val->type==VAL_ARR) {
 		char *st = malloc(valera_array_string_size(val->arr));
 		valera_array_string(val->arr, st);
@@ -74,6 +74,36 @@ void valera_value_string(valera_value_t *val, char *string) {
 valera_value_t *valera_value_new() {
 	valera_value_t *tmp = malloc(sizeof(valera_value_t));
 	return tmp;
+}
+
+void valera_value_copy(valera_value_t* src, valera_value_t* dst);
+
+void valera_copy(valera_node_t* src, valera_node_t* dst) {
+	if (!src || !dst || !src->busy) return;
+	dst->busy = src->busy;
+	// printf("NAME: %s\n", src->name);
+	dst->name = (char*)malloc(strlen(src->name)+1);
+	strcpy(dst->name, src->name);
+	valera_value_copy(src->value, dst->value);
+	dst->next = valera_new();
+	valera_copy(src->next, dst->next);
+}
+
+void valera_value_copy(valera_value_t* src, valera_value_t* dst) {
+	// printf("VALCOPY: %p, %p\n", src, dst);
+	if (!src || !dst) return;
+	dst->used = src->used;
+	dst->type = src->type;
+	dst->num = src->num;
+	dst->str = malloc(strlen(src->str)+1);
+	strcpy(dst->str, src->str);
+	if(dst->type == VAL_OBJ) {
+		valera_copy(src->obj, dst->obj);
+	}else if(dst->type == VAL_ARR) {
+		printf("VALERA: Array copying currently unimplemented!\n");
+		exit(1);
+	}
+	//valera_array_copy(src-arr, dst->arr);
 }
 
 void valera_value_set_string(valera_value_t *val, char* string) {val->type = VAL_STR; val->str = string;}
@@ -91,6 +121,7 @@ void valera_array_destroy(valera_array_t *arr) {
 	for(int i=0; i<arr->length; i++) {
 		valera_value_destroy(arr->values[i]);
 	}
+	free(arr);
 }
 
 valera_array_t *valera_array_new() {
@@ -188,7 +219,8 @@ void valera_array_string(valera_array_t *arr, char *string) {
 		for(int j=0; j<stsize; j++) {
 			string[point++] = vl[j];
 		}
-		if(!(i==sz-1)) {
+		// if(!(i==sz-1)) {
+		if(i!=sz-1) {
 			string[point++] = ',';
 			string[point++] = ' ';
 		}
@@ -223,14 +255,16 @@ void _valera_new(valera_node_t *obj) {
 void valera_destroy(valera_node_t *obj) {
 	// TODO: Memory cleanup
 	while(1) {
-		if(obj->next->busy==0) break;
+		if(!obj->next->busy) break;
 		obj->busy = 0;
 		if(obj->value->type==VAL_OBJ) {
 			valera_destroy(obj->value->obj);
 		}
 		valera_value_destroy(obj->value);
+		free(obj->name);
 		obj = obj->next;
 	}
+	free(obj);
 }
 
 void valera_print(valera_node_t *obj) {
@@ -241,7 +275,7 @@ void valera_print(valera_node_t *obj) {
 		valera_value_print(obj->value);
 		char stop = obj->next->busy==0;
 		if(stop) break;
-		if(!stop) printf(", ");
+		else printf(", ");
 		obj = obj->next;
 	}
 	
@@ -250,7 +284,8 @@ void valera_print(valera_node_t *obj) {
 
 void valera_set(valera_node_t *obj, char* name, valera_value_t *value) {
 	obj->busy  = 1;
-	obj->name  = name;
+	obj->name  = malloc(strlen(name)+1);
+	strcpy(obj->name, name);
 	obj->value = value;
 }
 

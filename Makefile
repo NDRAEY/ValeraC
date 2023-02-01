@@ -2,7 +2,7 @@ all: libvalera.so
 
 libvalera.so:
 	@echo "Compiling Valera shared library..."
-	@gcc valera.c -shared -o libvalera.so
+	@gcc valera.c -Wall -shared -o libvalera.so
 
 example:
 	@echo "Compiling example..."
@@ -23,6 +23,9 @@ join:
 	@echo "Compiling join..."
 	@gcc valera.c examples/join.c -I. -o ./join
 	@echo "Run program with ./join"
+
+test_change:
+	@gcc valera.c examples/test_change.c -I. -o ./change
 
 install: libvalera.so
 	install libvalera.so $(PREFIX)/lib/
